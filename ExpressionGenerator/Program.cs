@@ -11,7 +11,7 @@ namespace ExpressionGenerator
     {
         static void Main(string[] args)
         {
-            var generator = new ExpressionGenerator();
+            var generator = ExpressionGenerator.Instance;
             var expr      = generator.BuildExpression(50, 4);
             Console.WriteLine(expr);
             Console.ReadKey();

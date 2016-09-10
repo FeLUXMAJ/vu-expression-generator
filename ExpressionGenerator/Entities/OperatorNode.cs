@@ -43,7 +43,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
                 if (!Configuration.AllowedOperators.HasFlag(Configuration.Operators.SUB))
                     return false;
 
-                int naturalModification = Configuration.AllowZero ? 1 : 0;
+                int naturalModification = Configuration.AllowZero ? 0 : 1;
 
                 int lowerBound = goal + naturalModification;
                 int upperBound = Configuration.MaxOperandValue;
@@ -64,7 +64,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
             {
                 if (!Configuration.AllowedOperators.HasFlag(Configuration.Operators.ADD))
                     return false;
-                int naturalModification = Configuration.AllowZero ? 1 : 0;
+                int naturalModification = Configuration.AllowZero ? 0 : 1;
                 int lowerBound = Math.Max(naturalModification, goal - Configuration.MaxOperandValue);
                 int upperBound = Math.Min(Configuration.MaxOperandValue, goal - naturalModification);
                 if (upperBound < lowerBound)
@@ -118,19 +118,6 @@ namespace ExpressionGenerator.Entities.ExpressionTree
         public string Evaluate()
         {
             string ret = "";
-            /*if (Left is OperandNode || ((OperatorNode)Left).Operator.PrecedenceLevel == Operator.PrecedenceLevel)
-                ret += Left.Evaluate();
-            else
-                ret += "(" + Left.Evaluate() + ")";
-
-            ret += " " + Operator.ToString() + " ";
-
-            if (Right is OperandNode || ((OperatorNode)Right).Operator.PrecedenceLevel == Operator.PrecedenceLevel)
-                ret += Right.Evaluate();
-            else
-                ret += "(" + Right.Evaluate() + ")";
-
-            return ret;*/
 
             bool shouldEnclose;
             if (Left is OperandNode)
@@ -146,17 +133,6 @@ namespace ExpressionGenerator.Entities.ExpressionTree
                 ret += "(" + Left.Evaluate() + ")";
             else
                 ret += Left.Evaluate();
-            
-            /*if (Left is OperandNode)
-                ret += Left.Evaluate();
-            else if (((OperatorNode)Left).Operator.PrecedenceLevel < Operator.PrecedenceLevel)
-                ret += "(" + Left.Evaluate() + ")";
-            else if (((OperatorNode)Left).Operator.PrecedenceLevel > Operator.PrecedenceLevel)
-                ret += Left.Evaluate();
-            else if (((OperatorNode)Left).Operator.PrecedenceLeft)
-                ret += "(" + Left.Evaluate() + ")";
-            else
-                ret += Left.Evaluate();*/
 
             ret += " " + Operator.ToString() + " ";
 
@@ -174,19 +150,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
             else
                 ret += Right.Evaluate();
 
-            /*if (Right is OperandNode)
-                ret += Right.Evaluate();
-            else if (((OperatorNode)Right).Operator.PrecedenceLevel < Operator.PrecedenceLevel)
-                ret += "(" + Right.Evaluate() + ")";
-            else if (((OperatorNode)Right).Operator.PrecedenceLevel > Operator.PrecedenceLevel)
-                ret += Right.Evaluate();
-            else if (((OperatorNode)Right).Operator.PrecedenceRight)
-                ret += "(" + Right.Evaluate() + ")";
-            else
-                ret += Right.Evaluate();*/
-
             return ret;
-            //return "(" + Left.Evaluate() + " " + Operator.ToString() + " " + Right.Evaluate() + ")"; 
         }
     }
 }
