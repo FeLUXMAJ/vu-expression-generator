@@ -21,12 +21,11 @@ namespace ExpressionGenerator.Entities.ExpressionTree
             }
         }
 
-        public void BuildTree()
+        public ExpressionTree(int desiredValue, int numberOfOperands = 2)
         {
-            _expression = null;
-            Root.Expand();
+            Root = new OperandNode(desiredValue);
+            if (numberOfOperands > 1)
+                Root = Root.Expand(numberOfOperands);
         }
-
-
     }
 }

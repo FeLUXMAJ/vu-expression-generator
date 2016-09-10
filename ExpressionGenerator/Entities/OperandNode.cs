@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExpressionGenerator.Entities.ExpressionTree
 {
-    class NumberNode : INode
+    class OperandNode : INode
     {
         public int Value { get; private set; }
 
@@ -14,14 +14,16 @@ namespace ExpressionGenerator.Entities.ExpressionTree
 
         public INode Right { get { return null; } }
 
-        public NumberNode()
+        public OperandNode(int value)
         {
-            Value = new Random().Next(); // TODO: fix
+            Value = value;
         }
 
         public INode Expand(int numberOfNewOperands = 2)
         {
-            return new OperatorNode();
+            if (numberOfNewOperands == 1)
+                return this;
+            return new OperatorNode(Value, numberOfNewOperands);
         }
 
         public string Evaluate()
