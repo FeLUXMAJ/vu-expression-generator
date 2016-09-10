@@ -43,11 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
     <Compile Include="Entities\ExpressionTree.cs" />
     <Compile Include="Entities\INode.cs" />
     <Compile Include="Entities\OperandNode.cs" />
     <Compile Include="Entities\Operator.cs" />
     <Compile Include="Entities\OperatorNode.cs" />
+    <Compile Include="ExpressionGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

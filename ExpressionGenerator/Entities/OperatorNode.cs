@@ -37,34 +37,76 @@ namespace ExpressionGenerator.Entities.ExpressionTree
 
         private bool IsValidOperator(char op, int goal, out int left, out int right)
         {
+            left = right = 0;
             if(op == '-')
             {
-                left = goal + 1;
+                if (!Configuration.AllowedOperators.HasFlag(Configuration.Operators.SUB))
+                    return false;
+
+                int naturalModification = Configuration.OnlyNaturalNumbers ? 1 : 0;
+
+                int lowerBound = goal + naturalModification;
+                int upperBound = Configuration.MaxOperandValue;
+
+                if (upperBound < lowerBound)
+                    return false;
+
+                left = _random.Next(lowerBound, upperBound + 1);
                 right = left - goal;
+                
+                if (left  < naturalModification || left  > Configuration.MaxOperandValue ||
+                    right < naturalModification || right > Configuration.MaxOperandValue)
+                    return false;
                 return true;
             }
 
             if(op == '+')
             {
-                left = goal - 1;
+                if (!Configuration.AllowedOperators.HasFlag(Configuration.Operators.ADD))
+                    return false;
+                int naturalModification = Configuration.OnlyNaturalNumbers ? 1 : 0;
+                int lowerBound = Math.Max(naturalModification, goal - Configuration.MaxOperandValue);
+                int upperBound = Math.Min(Configuration.MaxOperandValue, goal - naturalModification);
+                if (upperBound < lowerBound)
+                    return false;
+                left = _random.Next(lowerBound, upperBound + 1);
                 right = goal - left;
+                if (left  < naturalModification || left  > Configuration.MaxOperandValue ||
+                    right < naturalModification || right > Configuration.MaxOperandValue)
+                    return false;
                 return true;
             }
 
             if (op == '*')
             {
-                left = 1;
-                right = goal;
+                if (!Configuration.AllowedOperators.HasFlag(Configuration.Operators.MUL))
+                    return false;
+
+                var divisors = new List<int>();
+                for(int i = 1; i <= goal; i++)
+                    if(goal % i == 0)
+                        divisors.Add(i);
+
+                left = divisors[_random.Next(divisors.Count)];
+                right = goal / left;
+                
                 return true;
             }
 
             if(op == '/')
             {
-                left = 2 * goal;
-                right = 2;
+                if (!Configuration.AllowedOperators.HasFlag(Configuration.Operators.DIV))
+                    return false;
+
+                int lowerBound = 1;
+                int upperBound = Configuration.MaxOperandValue / goal;
+
+                right = _random.Next(lowerBound, upperBound + 1);
+                left = right * goal;
+
                 return true;
             }
-            left = right = 0;
+
             return false;
         }
 

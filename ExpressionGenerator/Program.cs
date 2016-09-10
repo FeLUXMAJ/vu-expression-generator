@@ -11,8 +11,9 @@ namespace ExpressionGenerator
     {
         static void Main(string[] args)
         {
-            var tree = new ExpressionTree(16, 50);
-            Console.WriteLine(tree.Expression);
+            var generator = new ExpressionGenerator();
+            var expr      = generator.BuildExpression(16, 10);
+            Console.WriteLine(expr);
             Console.ReadKey();
         }
     }
