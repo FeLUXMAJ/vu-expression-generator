@@ -9,7 +9,6 @@ namespace ExpressionGenerator.Entities.ExpressionTree
     class OperatorNode : INode
     {
         private static Random _random = new Random();
-        private char[] operatorValues = { '-', '+', '*', '/' };
 
         public INode Left { get; private set; }
         public INode Right { get; private set; }
@@ -21,7 +20,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
             char op;
             do
             {
-                op = operatorValues[_random.Next(operatorValues.Length)];
+                op = ExpressionTree.operators[_random.Next(ExpressionTree.operators.Count)];
             } while (!IsValidOperator(op, goal, out left, out right));
 
             Operator = new Operator(op);
@@ -40,9 +39,6 @@ namespace ExpressionGenerator.Entities.ExpressionTree
             left = right = 0;
             if(op == '-')
             {
-                if (!Configuration.AllowedOperators.HasFlag(Configuration.Operators.SUB))
-                    return false;
-
                 int naturalModification = Configuration.AllowZero ? 0 : 1;
 
                 int lowerBound = goal + naturalModification;
@@ -62,8 +58,6 @@ namespace ExpressionGenerator.Entities.ExpressionTree
 
             if(op == '+')
             {
-                if (!Configuration.AllowedOperators.HasFlag(Configuration.Operators.ADD))
-                    return false;
                 int naturalModification = Configuration.AllowZero ? 0 : 1;
                 int lowerBound = Math.Max(naturalModification, goal - Configuration.MaxOperandValue);
                 int upperBound = Math.Min(Configuration.MaxOperandValue, goal - naturalModification);
@@ -79,9 +73,6 @@ namespace ExpressionGenerator.Entities.ExpressionTree
 
             if (op == '*')
             {
-                if (!Configuration.AllowedOperators.HasFlag(Configuration.Operators.MUL))
-                    return false;
-
                 var divisors = new List<int>();
                 for(int i = 1; i <= goal; i++)
                     if(goal % i == 0)
@@ -95,9 +86,6 @@ namespace ExpressionGenerator.Entities.ExpressionTree
 
             if(op == '/')
             {
-                if (!Configuration.AllowedOperators.HasFlag(Configuration.Operators.DIV))
-                    return false;
-
                 int lowerBound = 1;
                 int upperBound = Configuration.MaxOperandValue / goal;
 
