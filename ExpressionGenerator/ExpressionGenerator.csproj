@@ -50,6 +50,7 @@
     <Compile Include="Entities\Operator.cs" />
     <Compile Include="Entities\OperatorNode.cs" />
     <Compile Include="ExpressionGenerator.cs" />
+    <Compile Include="Helpers\ListExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -11,6 +11,7 @@ namespace ExpressionGenerator
     class ExpressionGenerator
     {
         private static ExpressionGenerator _instance = null;
+        public  static Random Random = new Random();
 
         public static ExpressionGenerator Instance
         {

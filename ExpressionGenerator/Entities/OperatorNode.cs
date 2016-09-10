@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExpressionGenerator.Helpers;
 
 namespace ExpressionGenerator.Entities.ExpressionTree
 {
     class OperatorNode : INode
     {
-        private static Random _random = new Random();
-
         public INode Left { get; private set; }
         public INode Right { get; private set; }
         public Operator Operator { get; private set; }
@@ -20,7 +19,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
             char op;
             do
             {
-                op = ExpressionTree.operators[_random.Next(ExpressionTree.operators.Count)];
+                op = ExpressionTree.operators.GetRandomElement();
             } while (!IsValidOperator(op, goal, out left, out right));
 
             Operator = new Operator(op);
@@ -29,7 +28,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
             
             int toLeft = 0;
             if(numberOfNewNodes > 1)
-                toLeft = _random.Next(1, numberOfNewNodes);
+                toLeft = ExpressionGenerator.Random.Next(1, numberOfNewNodes);
             Left = Left.Expand(toLeft);
             Right = Right.Expand(numberOfNewNodes - toLeft);
         }   
@@ -47,7 +46,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
                 if (upperBound < lowerBound)
                     return false;
 
-                left = _random.Next(lowerBound, upperBound + 1);
+                left = ExpressionGenerator.Random.Next(lowerBound, upperBound + 1);
                 right = left - goal;
                 
                 if (left  < naturalModification || left  > Configuration.MaxOperandValue ||
@@ -63,7 +62,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
                 int upperBound = Math.Min(Configuration.MaxOperandValue, goal - naturalModification);
                 if (upperBound < lowerBound)
                     return false;
-                left = _random.Next(lowerBound, upperBound + 1);
+                left = ExpressionGenerator.Random.Next(lowerBound, upperBound + 1);
                 right = goal - left;
                 if (left  < naturalModification || left  > Configuration.MaxOperandValue ||
                     right < naturalModification || right > Configuration.MaxOperandValue)
@@ -78,7 +77,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
                     if(goal % i == 0)
                         divisors.Add(i);
 
-                left = divisors[_random.Next(divisors.Count)];
+                left = divisors.GetRandomElement();
                 right = goal / left;
                 
                 return true;
@@ -89,7 +88,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
                 int lowerBound = 1;
                 int upperBound = Configuration.MaxOperandValue / goal;
 
-                right = _random.Next(lowerBound, upperBound + 1);
+                right = ExpressionGenerator.Random.Next(lowerBound, upperBound + 1);
                 left = right * goal;
 
                 return true;
