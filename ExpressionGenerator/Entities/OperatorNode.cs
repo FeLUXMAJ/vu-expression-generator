@@ -9,11 +9,11 @@ namespace ExpressionGenerator.Entities.ExpressionTree
     class OperatorNode : INode
     {
         private static Random _random = new Random();
-        private Operator _operator;
         private char[] operatorValues = { '-', '+', '*', '/' };
-        public INode Left { get; private set; }
 
+        public INode Left { get; private set; }
         public INode Right { get; private set; }
+        public Operator Operator { get; private set; }
 
         public OperatorNode(int goal, int numberOfNewNodes = 2)
         {
@@ -24,7 +24,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
                 op = operatorValues[_random.Next(operatorValues.Length)];
             } while (!IsValidOperator(op, goal, out left, out right));
 
-            _operator = new Operator(op);
+            Operator = new Operator(op);
             Left  = new OperandNode(left);
             Right = new OperandNode(right);
             
@@ -43,7 +43,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
                 if (!Configuration.AllowedOperators.HasFlag(Configuration.Operators.SUB))
                     return false;
 
-                int naturalModification = Configuration.OnlyNaturalNumbers ? 1 : 0;
+                int naturalModification = Configuration.AllowZero ? 1 : 0;
 
                 int lowerBound = goal + naturalModification;
                 int upperBound = Configuration.MaxOperandValue;
@@ -64,7 +64,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
             {
                 if (!Configuration.AllowedOperators.HasFlag(Configuration.Operators.ADD))
                     return false;
-                int naturalModification = Configuration.OnlyNaturalNumbers ? 1 : 0;
+                int naturalModification = Configuration.AllowZero ? 1 : 0;
                 int lowerBound = Math.Max(naturalModification, goal - Configuration.MaxOperandValue);
                 int upperBound = Math.Min(Configuration.MaxOperandValue, goal - naturalModification);
                 if (upperBound < lowerBound)
@@ -117,7 +117,76 @@ namespace ExpressionGenerator.Entities.ExpressionTree
 
         public string Evaluate()
         {
-            return "(" + Left.Evaluate() + " " + _operator.ToString() + " " + Right.Evaluate() + ")"; 
+            string ret = "";
+            /*if (Left is OperandNode || ((OperatorNode)Left).Operator.PrecedenceLevel == Operator.PrecedenceLevel)
+                ret += Left.Evaluate();
+            else
+                ret += "(" + Left.Evaluate() + ")";
+
+            ret += " " + Operator.ToString() + " ";
+
+            if (Right is OperandNode || ((OperatorNode)Right).Operator.PrecedenceLevel == Operator.PrecedenceLevel)
+                ret += Right.Evaluate();
+            else
+                ret += "(" + Right.Evaluate() + ")";
+
+            return ret;*/
+
+            bool shouldEnclose;
+            if (Left is OperandNode)
+                shouldEnclose = false;
+            else
+            {
+                var left = (OperatorNode)Left;
+                shouldEnclose  = left.Operator.PrecedenceLevel < Operator.PrecedenceLevel;
+                shouldEnclose |= left.Operator == Operator && left.Operator.PrecedenceLeft;
+            }
+
+            if(shouldEnclose)
+                ret += "(" + Left.Evaluate() + ")";
+            else
+                ret += Left.Evaluate();
+            
+            /*if (Left is OperandNode)
+                ret += Left.Evaluate();
+            else if (((OperatorNode)Left).Operator.PrecedenceLevel < Operator.PrecedenceLevel)
+                ret += "(" + Left.Evaluate() + ")";
+            else if (((OperatorNode)Left).Operator.PrecedenceLevel > Operator.PrecedenceLevel)
+                ret += Left.Evaluate();
+            else if (((OperatorNode)Left).Operator.PrecedenceLeft)
+                ret += "(" + Left.Evaluate() + ")";
+            else
+                ret += Left.Evaluate();*/
+
+            ret += " " + Operator.ToString() + " ";
+
+            if (Right is OperandNode)
+                shouldEnclose = false;
+            else
+            {
+                var right = (OperatorNode)Right;
+                shouldEnclose  = right.Operator.PrecedenceLevel < Operator.PrecedenceLevel;
+                shouldEnclose |= right.Operator == Operator && right.Operator.PrecedenceRight;
+            }
+
+            if (shouldEnclose)
+                ret += "(" + Right.Evaluate() + ")";
+            else
+                ret += Right.Evaluate();
+
+            /*if (Right is OperandNode)
+                ret += Right.Evaluate();
+            else if (((OperatorNode)Right).Operator.PrecedenceLevel < Operator.PrecedenceLevel)
+                ret += "(" + Right.Evaluate() + ")";
+            else if (((OperatorNode)Right).Operator.PrecedenceLevel > Operator.PrecedenceLevel)
+                ret += Right.Evaluate();
+            else if (((OperatorNode)Right).Operator.PrecedenceRight)
+                ret += "(" + Right.Evaluate() + ")";
+            else
+                ret += Right.Evaluate();*/
+
+            return ret;
+            //return "(" + Left.Evaluate() + " " + Operator.ToString() + " " + Right.Evaluate() + ")"; 
         }
     }
 }

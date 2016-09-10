@@ -11,8 +11,8 @@ namespace ExpressionGenerator
     {
         public ExpressionGenerator()
         {
-            Configuration.MaxOperandValue = 50;
-            Configuration.OnlyNaturalNumbers = true;
+            Configuration.MaxOperandValue = 100;
+            Configuration.AllowZero = true;
             Configuration.AllowedOperators = Configuration.Operators.ALL;
         }
 

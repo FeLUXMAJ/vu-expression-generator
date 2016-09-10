@@ -12,7 +12,7 @@ namespace ExpressionGenerator
         static void Main(string[] args)
         {
             var generator = new ExpressionGenerator();
-            var expr      = generator.BuildExpression(16, 10);
+            var expr      = generator.BuildExpression(50, 4);
             Console.WriteLine(expr);
             Console.ReadKey();
         }

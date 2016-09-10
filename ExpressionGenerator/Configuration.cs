@@ -19,7 +19,7 @@ namespace ExpressionGenerator
         }
 
         public static int       MaxOperandValue;
-        public static bool      OnlyNaturalNumbers;
+        public static bool      AllowZero;
         public static Operators AllowedOperators;
     }
 }

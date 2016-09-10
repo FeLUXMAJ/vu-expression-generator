@@ -8,10 +8,9 @@ namespace ExpressionGenerator.Entities.ExpressionTree
 {
     class OperandNode : INode
     {
+
         public int Value { get; private set; }
-
         public INode Left { get { return null; } }
-
         public INode Right { get { return null; } }
 
         public OperandNode(int value)
