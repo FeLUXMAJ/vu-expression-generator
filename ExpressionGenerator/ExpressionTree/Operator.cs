@@ -7,8 +7,7 @@ namespace ExpressionGenerator.ExpressionTree
         private char _operator;
         private Func<int, int, int> calculate;
         public int  PrecedenceLevel { get; private set; }
-        public bool PrecedenceLeft  { get; private set; } // Parenthesise if expression is on the left
-        public bool PrecedenceRight { get; private set; } // Parenthesise if expression is on the right
+        public bool IsStrongProcedence { get; private set; }
 
         public Operator(char op)
         {
@@ -16,26 +15,25 @@ namespace ExpressionGenerator.ExpressionTree
             if (op == '+')
             {
                 PrecedenceLevel = 1;
-                PrecedenceLeft = PrecedenceRight = false;
+                IsStrongProcedence = false;
                 calculate = (x, y) => (x + y);
             }
             if (op == '-')
             {
                 PrecedenceLevel = 1;
-                PrecedenceLeft = false;
-                PrecedenceRight = true;
+                IsStrongProcedence = true;
                 calculate = (x, y) => (x - y);
             }
             if (op == '*')
             {
                 PrecedenceLevel = 2;
-                PrecedenceLeft = PrecedenceRight = false;
+                IsStrongProcedence = false;
                 calculate = (x, y) => (x * y);
             }
             if (op == '/')
             {
                 PrecedenceLevel = 2;
-                PrecedenceLeft = PrecedenceRight = true;
+                IsStrongProcedence = true;
                 calculate = (x, y) => (x / y);
             }
         }

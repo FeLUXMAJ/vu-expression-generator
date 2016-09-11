@@ -24,7 +24,7 @@ namespace ExpressionGenerator.ExpressionTree
             do
             {
                 op = Tree.operators.GetRandomElement();
-            } while (!IsValidOperator(op, goal, out left, out right));
+            } while (!OperandSplitter.Split(goal, op, out left, out right));
 
             Operator = new Operator(op);
             Left  = new OperandNode(left);
@@ -36,71 +36,7 @@ namespace ExpressionGenerator.ExpressionTree
             Left = Left.Expand(toLeft);
             Right = Right.Expand(numberOfNewNodes - toLeft);
         }   
-
-        private bool IsValidOperator(char op, int goal, out int left, out int right)
-        {
-            left = right = 0;
-            if(op == '-')
-            {
-                int naturalModification = Configuration.AllowZero ? 0 : 1;
-
-                int lowerBound = goal + naturalModification;
-                int upperBound = Configuration.MaxOperandValue;
-
-                if (upperBound < lowerBound)
-                    return false;
-
-                left = ExpressionGenerator.Random.Next(lowerBound, upperBound + 1);
-                right = left - goal;
-                
-                if (left  < naturalModification || left  > Configuration.MaxOperandValue ||
-                    right < naturalModification || right > Configuration.MaxOperandValue)
-                    return false;
-                return true;
-            }
-
-            if(op == '+')
-            {
-                int naturalModification = Configuration.AllowZero ? 0 : 1;
-                int lowerBound = Math.Max(naturalModification, goal - Configuration.MaxOperandValue);
-                int upperBound = Math.Min(Configuration.MaxOperandValue, goal - naturalModification);
-                if (upperBound < lowerBound)
-                    return false;
-                left = ExpressionGenerator.Random.Next(lowerBound, upperBound + 1);
-                right = goal - left;
-                if (left  < naturalModification || left  > Configuration.MaxOperandValue ||
-                    right < naturalModification || right > Configuration.MaxOperandValue)
-                    return false;
-                return true;
-            }
-
-            if (op == '*')
-            {
-                var divisors = new List<int>();
-                for(int i = 1; i <= goal; i++)
-                    if(goal % i == 0)
-                        divisors.Add(i);
-
-                left = divisors.GetRandomElement();
-                right = goal / left;
-                
-                return true;
-            }
-
-            if(op == '/')
-            {
-                int lowerBound = 1;
-                int upperBound = Configuration.MaxOperandValue / goal;
-
-                right = ExpressionGenerator.Random.Next(lowerBound, upperBound + 1);
-                left = right * goal;
-
-                return true;
-            }
-
-            return false;
-        }
-
+        
         public INode Expand(int numberOfNewOperands = 2)
         {
             return this;
@@ -117,7 +53,6 @@ namespace ExpressionGenerator.ExpressionTree
             {
                 var left = (OperatorNode)Left;
                 shouldEnclose  = left.Operator.PrecedenceLevel < Operator.PrecedenceLevel;
-                shouldEnclose |= left.Operator == Operator && left.Operator.PrecedenceLeft;
             }
 
             if(shouldEnclose)
@@ -133,7 +68,7 @@ namespace ExpressionGenerator.ExpressionTree
             {
                 var right = (OperatorNode)Right;
                 shouldEnclose  = right.Operator.PrecedenceLevel < Operator.PrecedenceLevel;
-                shouldEnclose |= right.Operator == Operator && right.Operator.PrecedenceRight;
+                shouldEnclose |= right.Operator.PrecedenceLevel == Operator.PrecedenceLevel && Operator.IsStrongProcedence;
             }
 
             if (shouldEnclose)
@@ -147,7 +82,7 @@ namespace ExpressionGenerator.ExpressionTree
         public void SetValue(int goal)
         {
             int left, right;
-            IsValidOperator(Operator.ToString().ToCharArray()[0], goal, out left, out right);
+            OperandSplitter.Split(goal, Operator.ToString().ToCharArray()[0], out left, out right);
             Left.SetValue(left);
             Right.SetValue(right);
         }
