@@ -43,14 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration.cs" />
-    <Compile Include="ExpressionFormat.cs" />
+    <Compile Include="ExpressionGenerator\Configuration.cs" />
+    <Compile Include="ExpressionGenerator\ExpressionFormat.cs" />
     <Compile Include="ExpressionTree\Tree.cs" />
     <Compile Include="ExpressionTree\INode.cs" />
     <Compile Include="ExpressionTree\OperandNode.cs" />
     <Compile Include="ExpressionTree\Operator.cs" />
     <Compile Include="ExpressionTree\OperatorNode.cs" />
-    <Compile Include="ExpressionGenerator.cs" />
+    <Compile Include="ExpressionGenerator\ExpressionGenerator.cs" />
     <Compile Include="Helpers\ListExtensions.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\SplitHelper.cs" />
