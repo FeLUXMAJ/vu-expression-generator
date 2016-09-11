@@ -48,6 +48,13 @@ namespace ExpressionGenerator.ExpressionTree
             Root = new OperatorNode(op, left, right);
         }
 
+        public void Clear()
+        {
+            Root.Clear();
+            Root.Left.Clear();
+            Root.Right.Clear();
+        }
+
         public static Tree Join(char op, Tree left, Tree right)
         {
             return new Tree(op, left, right);

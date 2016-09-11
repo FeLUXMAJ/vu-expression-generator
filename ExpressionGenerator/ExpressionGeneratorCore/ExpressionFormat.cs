@@ -10,16 +10,24 @@ namespace ExpressionGenerator
     class ExpressionFormat
     {
         private Tree _expressionTree;
+        private static int _globalIndex = 1;
+
+        public string Format { get; private set; }
+        public int Index { get; private set; }
 
         public ExpressionFormat(string infixExpression)
         {
+            Index = _globalIndex++;
+            Format = infixExpression;
             _expressionTree = ParseTree(infixExpression);
         }
 
         public string GetPopulatedExpression(int value)
         {
             _expressionTree.PopulateWithNumbers(value);
-            return _expressionTree.Expression;
+            string expression = _expressionTree.Expression;
+            _expressionTree.Clear();
+            return expression;
         }
 
         private Tree ParseTree(string expression)

@@ -91,5 +91,9 @@ namespace ExpressionGenerator.ExpressionTree
         {
             return Operator.Evaluate(Left.GetValue(), Right.GetValue());
         }
+
+        public void Clear()
+        {
+        }
     }
 }

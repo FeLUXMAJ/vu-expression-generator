@@ -7,6 +7,7 @@
         INode Expand(int numberOfNewOperands = 2);
         int? GetValue();
         void SetValue(int value);
+        void Clear();
         string Evaluate();
     }
 }

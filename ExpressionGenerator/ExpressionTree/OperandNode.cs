@@ -44,5 +44,10 @@ namespace ExpressionGenerator.ExpressionTree
         {
             return Value;
         }
+
+        public void Clear()
+        {
+            Value = null;
+        }
     }
 }
