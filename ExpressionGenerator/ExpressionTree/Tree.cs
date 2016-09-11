@@ -18,6 +18,11 @@ namespace ExpressionGenerator.ExpressionTree
             }
         }
 
+        public Tree()
+        {
+            Root = new OperandNode();
+        }
+
         public Tree(int desiredValue, int numberOfOperands = 2)
         {
             if(operators == null)
@@ -36,6 +41,16 @@ namespace ExpressionGenerator.ExpressionTree
             Root = new OperandNode(desiredValue);
             if (numberOfOperands > 1)
                 Root = Root.Expand(numberOfOperands);
+        }
+
+        private Tree(char op, Tree left, Tree right)
+        {
+            Root = new OperatorNode(op, left, right);
+        }
+
+        public static Tree Join(char op, Tree left, Tree right)
+        {
+            return new Tree(op, left, right);
         }
     }
 }

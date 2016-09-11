@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
+    <Compile Include="ExpressionFormat.cs" />
     <Compile Include="ExpressionTree\Tree.cs" />
     <Compile Include="ExpressionTree\INode.cs" />
     <Compile Include="ExpressionTree\OperandNode.cs" />

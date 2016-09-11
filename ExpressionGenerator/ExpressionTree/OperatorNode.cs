@@ -10,6 +10,13 @@ namespace ExpressionGenerator.ExpressionTree
         public INode Right { get; private set; }
         public Operator Operator { get; private set; }
 
+        internal OperatorNode(char op, Tree left, Tree right)
+        {
+            Operator = new Operator(op);
+            Left = left.Root;
+            Right = right.Root;
+        }
+
         public OperatorNode(int goal, int numberOfNewNodes = 2)
         {
             int left, right;
