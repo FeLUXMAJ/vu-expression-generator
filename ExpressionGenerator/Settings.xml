@@ -6,6 +6,6 @@
     <Operation>*</Operation>
     <Operation>/</Operation>
   </AllowedOperations>
-  <MaxOperandSize>100</MaxOperandSize>
+  <MaxOperandSize>50</MaxOperandSize>
   <AllowZero>0</AllowZero>
 </Root>

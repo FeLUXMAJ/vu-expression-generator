@@ -11,9 +11,11 @@ namespace ExpressionGenerator
             //var format    = generator.FromFormat("#-#+#/#*#+#/#-#+#+#*#", 3);
             //Console.WriteLine(expr);
             //Console.WriteLine(format);
-            for(int i = 10; i <= 20; i++)
+
+            //var expr = generator.FromFormat("((#+#-#/#)*#-(#*#+#/#-#)/#)/#", 130);
+            for(int i = 0; i < 10; i++)
             {
-                var expr = generator.BuildExpression(i, i / 2);
+                var expr = generator.BuildExpression(999, 10);
                 Console.WriteLine(expr);
             }
             Console.ReadKey();

@@ -24,17 +24,17 @@ namespace ExpressionGenerator.ExpressionTree
             do
             {
                 op = Tree.operators.GetRandomElement();
-            } while (!OperandSplitter.Split(goal, op, out left, out right));
+            } while (!SplitHelper.SplitValue(goal, op, out left, out right));
 
             Operator = new Operator(op);
             Left  = new OperandNode(left);
             Right = new OperandNode(right);
-            
-            int toLeft = 0;
-            if(numberOfNewNodes > 1)
-                toLeft = ExpressionGenerator.Random.Next(1, numberOfNewNodes);
+
+            int toLeft, toRight;
+            SplitHelper.SplitNumberOfOperands(left, right, numberOfNewNodes, out toLeft, out toRight);
+
             Left = Left.Expand(toLeft);
-            Right = Right.Expand(numberOfNewNodes - toLeft);
+            Right = Right.Expand(toRight);
         }   
         
         public INode Expand(int numberOfNewOperands = 2)
@@ -82,7 +82,7 @@ namespace ExpressionGenerator.ExpressionTree
         public void SetValue(int goal)
         {
             int left, right;
-            OperandSplitter.Split(goal, Operator.ToString().ToCharArray()[0], out left, out right);
+            SplitHelper.SplitValue(goal, Operator.ToString().ToCharArray()[0], out left, out right);
             Left.SetValue(left);
             Right.SetValue(right);
         }

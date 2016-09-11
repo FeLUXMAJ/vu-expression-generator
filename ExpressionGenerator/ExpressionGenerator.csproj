@@ -52,7 +52,7 @@
     <Compile Include="ExpressionTree\OperatorNode.cs" />
     <Compile Include="ExpressionGenerator.cs" />
     <Compile Include="Helpers\ListExtensions.cs" />
-    <Compile Include="Helpers\OperandSplitter.cs" />
+    <Compile Include="Helpers\SplitHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
