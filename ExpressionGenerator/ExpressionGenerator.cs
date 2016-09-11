@@ -24,6 +24,11 @@ namespace ExpressionGenerator
             ReadSettingsFile();
         }
 
+        public string FromFormat(string format, int goal)
+        {
+            return new ExpressionFormat(format).GetPopulatedExpression(goal);
+        }
+
         public void ReadSettingsFile()
         {
             var doc = new XmlDocument();

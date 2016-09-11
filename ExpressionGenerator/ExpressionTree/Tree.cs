@@ -52,5 +52,12 @@ namespace ExpressionGenerator.ExpressionTree
         {
             return new Tree(op, left, right);
         }
+
+        public void PopulateWithNumbers(int goal)
+        {
+            if (Root.GetValue() != null)
+                return;
+            Root.SetValue(goal);
+        }
     }
 }

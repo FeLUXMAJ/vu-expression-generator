@@ -1,4 +1,6 @@
-﻿namespace ExpressionGenerator.ExpressionTree
+﻿using System;
+
+namespace ExpressionGenerator.ExpressionTree
 {
     class OperandNode : INode
     {
@@ -36,6 +38,11 @@
             if (Value == null)
                 return "#";
             return Value.ToString();
+        }
+
+        public int? GetValue()
+        {
+            return Value;
         }
     }
 }

@@ -14,7 +14,12 @@ namespace ExpressionGenerator
         public ExpressionFormat(string infixExpression)
         {
             _expressionTree = ParseTree(infixExpression);
-            Console.WriteLine(_expressionTree.Expression);
+        }
+
+        public string GetPopulatedExpression(int value)
+        {
+            _expressionTree.PopulateWithNumbers(value);
+            return _expressionTree.Expression;
         }
 
         private Tree ParseTree(string expression)

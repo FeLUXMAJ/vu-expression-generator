@@ -6,10 +6,11 @@ namespace ExpressionGenerator
     {
         static void Main(string[] args)
         {
-            /*var generator = ExpressionGenerator.Instance;
+            var generator = ExpressionGenerator.Instance;
             var expr      = generator.BuildExpression(100, 20);
-            Console.WriteLine(expr);*/
-            new ExpressionFormat("#*(#+#*(#-#+#))");
+            var format    = generator.FromFormat("#+(#*#)-#", 16);
+            Console.WriteLine(expr);
+            Console.WriteLine(format);
             Console.ReadKey();
         }
     }

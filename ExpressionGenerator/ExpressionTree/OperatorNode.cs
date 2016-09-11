@@ -143,5 +143,18 @@ namespace ExpressionGenerator.ExpressionTree
 
             return ret;
         }
+
+        public void SetValue(int goal)
+        {
+            int left, right;
+            IsValidOperator(Operator.ToString().ToCharArray()[0], goal, out left, out right);
+            Left.SetValue(left);
+            Right.SetValue(right);
+        }
+
+        public int? GetValue()
+        {
+            return Operator.Evaluate(Left.GetValue(), Right.GetValue());
+        }
     }
 }
