@@ -177,7 +177,7 @@ namespace ExpressionGenerator
 
         private static void ShowExistingFormats()
         {
-            if(_formats == null)
+            if(_formats.Count == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("No formats found.");
