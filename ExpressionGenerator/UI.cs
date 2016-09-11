@@ -19,7 +19,7 @@ namespace ExpressionGenerator
             @"(?x)                            # IgnorePatternWhitespace. Also allows comments
               ^                               # Anchor to start of string
                   (?>                         # Start non-backtracking (greedy) subexpression
-                      (?<p> \( ) *             # Push to stack if '(' is found, repeat 0.. times
+                      (?<p> \( ) *            # Push to stack if '(' is found, repeat 0.. times
                       (?>\#)                  # Match one '#'
                       (?<-p> \) )*            # Pop off stack if ')' is found, repeat 0.. times
                   )                           # Matches a valid part of an expression up to the first operand
