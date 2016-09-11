@@ -45,18 +45,13 @@ namespace ExpressionGenerator
                 }
                 else
                 {
-                    if(operatorStack.Count > 0)
+                    var current = new Operator(ch);
+                    while(operatorStack.Count > 0 && new Operator(operatorStack.Peek()).PrecedenceLevel >= current.PrecedenceLevel)
                     {
-                        char topOperator = operatorStack.Peek();
-                        var inStack = new Operator(topOperator);
-                        var newOp = new Operator(ch);
-                        if (newOp.PrecedenceLevel <= inStack.PrecedenceLevel)
-                        {
-                            operatorStack.Pop();
-                            Tree right = stack.Pop();
-                            Tree left = stack.Pop();
-                            stack.Push(Tree.Join(topOperator, left, right));
-                        }
+                        var topOperator = operatorStack.Pop();
+                        Tree right = stack.Pop();
+                        Tree left = stack.Pop();
+                        stack.Push(Tree.Join(topOperator, left, right));
                     }
                     operatorStack.Push(ch);
                 }
