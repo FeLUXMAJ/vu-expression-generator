@@ -12,7 +12,8 @@ namespace ExpressionGenerator
     static class UI
     {
         private static ExpressionGenerator _generator = ExpressionGenerator.Instance;
-        private static List<ExpressionFormat> _formats = new List<ExpressionFormat>();
+        private static List<ExpressionFormat> _formats = new List<ExpressionFormat>(); //[[11]]
+        //[[9]]
         private static Regex _formatRegex = new Regex
             (
             @"(?x)                            # IgnorePatternWhitespace. Also allows comments
@@ -159,7 +160,7 @@ namespace ExpressionGenerator
                 return;
             }
 
-            int removed = _formats.RemoveAll(x => x.Index == id);
+            int removed = _formats.RemoveAll(x => x.Index == id); //[[12]]
             if(removed == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
