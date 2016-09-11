@@ -44,11 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
-    <Compile Include="Entities\ExpressionTree.cs" />
-    <Compile Include="Entities\INode.cs" />
-    <Compile Include="Entities\OperandNode.cs" />
-    <Compile Include="Entities\Operator.cs" />
-    <Compile Include="Entities\OperatorNode.cs" />
+    <Compile Include="ExpressionTree\Tree.cs" />
+    <Compile Include="ExpressionTree\INode.cs" />
+    <Compile Include="ExpressionTree\OperandNode.cs" />
+    <Compile Include="ExpressionTree\Operator.cs" />
+    <Compile Include="ExpressionTree\OperatorNode.cs" />
     <Compile Include="ExpressionGenerator.cs" />
     <Compile Include="Helpers\ListExtensions.cs" />
     <Compile Include="Program.cs" />
@@ -60,6 +60,7 @@
   <ItemGroup>
     <Content Include="Settings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

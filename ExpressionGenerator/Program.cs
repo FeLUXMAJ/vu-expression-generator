@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ExpressionGenerator.Entities.ExpressionTree;
 
 namespace ExpressionGenerator
 {
@@ -12,7 +7,7 @@ namespace ExpressionGenerator
         static void Main(string[] args)
         {
             var generator = ExpressionGenerator.Instance;
-            var expr      = generator.BuildExpression(50, 4);
+            var expr      = generator.BuildExpression(100, 20);
             Console.WriteLine(expr);
             Console.ReadKey();
         }

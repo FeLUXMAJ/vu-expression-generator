@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ExpressionGenerator.Helpers;
 
-namespace ExpressionGenerator.Entities.ExpressionTree
+namespace ExpressionGenerator.ExpressionTree
 {
     class OperatorNode : INode
     {
@@ -19,7 +16,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
             char op;
             do
             {
-                op = ExpressionTree.operators.GetRandomElement();
+                op = Tree.operators.GetRandomElement();
             } while (!IsValidOperator(op, goal, out left, out right));
 
             Operator = new Operator(op);

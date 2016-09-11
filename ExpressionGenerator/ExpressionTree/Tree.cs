@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace ExpressionGenerator.Entities.ExpressionTree
+namespace ExpressionGenerator.ExpressionTree
 {
-    class ExpressionTree
+    class Tree
     {
         private string _expression;
         public static List<char> operators = null;
@@ -22,7 +18,7 @@ namespace ExpressionGenerator.Entities.ExpressionTree
             }
         }
 
-        public ExpressionTree(int desiredValue, int numberOfOperands = 2)
+        public Tree(int desiredValue, int numberOfOperands = 2)
         {
             if(operators == null)
             {

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ExpressionGenerator.Entities.ExpressionTree;
+using ExpressionGenerator.ExpressionTree;
 using System.Xml;
 
 namespace ExpressionGenerator
@@ -60,7 +56,7 @@ namespace ExpressionGenerator
 
         public string BuildExpression(int desiredValue, int numberOfOperands = 2)
         {
-            var expressionTree = new ExpressionTree(desiredValue, numberOfOperands);
+            var expressionTree = new Tree(desiredValue, numberOfOperands);
             return expressionTree.Expression;
         }
     }

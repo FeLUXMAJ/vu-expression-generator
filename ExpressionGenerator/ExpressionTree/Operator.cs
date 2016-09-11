@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ExpressionGenerator.Entities.ExpressionTree
+﻿namespace ExpressionGenerator.ExpressionTree
 {
     internal class Operator
     {
