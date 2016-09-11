@@ -35,7 +35,7 @@ namespace ExpressionGenerator.Helpers
                     }
 
                     // More operands (on average) should be assigned to the bigger side
-                    double probabilityThreshold = 100 / ((double)leftValue/rightValue + 1);
+                    double probabilityThreshold = 100 / ((double)leftValue/rightValue + 1); //[[10]]
                     if (ExpressionGenerator.Random.NextDouble() * 100 < probabilityThreshold)
                         MathHelper.Swap(ref operandsToLeft, ref operandsToRight);
                 }
@@ -44,7 +44,7 @@ namespace ExpressionGenerator.Helpers
                 {
                     if (leftValue > rightValue)
                     {
-                        operandsToLeft = (int)(totalNumberOfOperands * 0.8);
+                        operandsToLeft = (int)(totalNumberOfOperands * 0.8); //[[10]]
                         operandsToRight = totalNumberOfOperands - operandsToLeft;
                     }
                     else

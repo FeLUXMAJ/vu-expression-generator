@@ -2,11 +2,11 @@
 
 namespace ExpressionGenerator.ExpressionTree
 {
-    internal class Operator
+    internal struct Operator //[[2]]
     {
         private char _operator;
         private Func<int, int, int> calculate;
-        public int  PrecedenceLevel { get; private set; }
+        public int  PrecedenceLevel { get; private set; } //[[4]]
         public bool IsStrongProcedence { get; private set; }
 
         public Operator(char op)
@@ -18,24 +18,26 @@ namespace ExpressionGenerator.ExpressionTree
                 IsStrongProcedence = false;
                 calculate = (x, y) => (x + y);
             }
-            if (op == '-')
+            else if (op == '-')
             {
                 PrecedenceLevel = 1;
                 IsStrongProcedence = true;
                 calculate = (x, y) => (x - y);
             }
-            if (op == '*')
+            else if (op == '*')
             {
                 PrecedenceLevel = 2;
                 IsStrongProcedence = false;
                 calculate = (x, y) => (x * y);
             }
-            if (op == '/')
+            else if (op == '/')
             {
                 PrecedenceLevel = 2;
                 IsStrongProcedence = true;
                 calculate = (x, y) => (x / y);
             }
+            else
+                throw new ArgumentException("Invalid operator");
         }
 
         public int? Evaluate(int? left, int? right)

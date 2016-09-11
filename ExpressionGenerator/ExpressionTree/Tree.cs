@@ -8,7 +8,7 @@ namespace ExpressionGenerator.ExpressionTree
         public static List<char> operators = null;
 
         public INode Root { get; private set; }
-        public string Expression
+        public string Expression //[[4]]
         {
             get
             {

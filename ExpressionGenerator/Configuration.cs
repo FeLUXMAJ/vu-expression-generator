@@ -5,7 +5,7 @@ namespace ExpressionGenerator
     class Configuration
     {
         [Flags]
-        public enum Operators
+        public enum Operators //[[3]]
         {
             NONE = 0,
             ADD  = 1,

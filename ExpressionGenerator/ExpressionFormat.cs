@@ -24,7 +24,7 @@ namespace ExpressionGenerator
 
         private Tree ParseTree(string expression)
         {
-            var stack         = new Stack<Tree>();
+            var stack         = new Stack<Tree>(); //[[8]]
             var operatorStack = new Stack<char>();
 
             foreach(char ch in expression)

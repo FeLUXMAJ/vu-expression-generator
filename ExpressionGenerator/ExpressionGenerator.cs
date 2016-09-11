@@ -29,7 +29,7 @@ namespace ExpressionGenerator
             return new ExpressionFormat(format).GetPopulatedExpression(goal);
         }
 
-        public void ReadSettingsFile()
+        public void ReadSettingsFile() //[[7]]
         {
             var doc = new XmlDocument();
             doc.Load("Settings.xml");
