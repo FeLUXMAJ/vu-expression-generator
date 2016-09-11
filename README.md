@@ -10,9 +10,9 @@ To do list:
   - [x]  Išplėtimo (extension) metodo panaudojimas (0,1).
   - [x]  Nuskaitymą iš failo (0,1).
   - [x]  Generic tipo panaudojimas (0,1).
-  - [ ]  Duomenų validavimą (regex, 0,05).
+  - [x]  Duomenų validavimą (regex, 0,05).
   - [x]  Duomenų konversiją: plečiančią (0,05) ir siaurinančią (0,05).
-  - [ ]  Duomenų padėjimą į kolekciją, iteravimą per ją (0,1).
+  - [x]  Duomenų padėjimą į kolekciją, iteravimą per ją (0,1).
   - [ ]  Bent du LINQ į objektus panaudojimai: per metodus (0,05) ir per užklausas (0,05), vienas iš jų turi būti su groupJoin.
   - [ ]  Išreikštai įgyvendinami bent 3 .NET standartiniai interfeisai (0,3):
   - [ ]      IEnumerable,
