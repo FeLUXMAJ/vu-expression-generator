@@ -36,12 +36,8 @@ namespace ExpressionGenerator.Helpers
 
                     // More operands (on average) should be assigned to the bigger side
                     double probabilityThreshold = 100 / ((double)leftValue/rightValue + 1);
-                    if(ExpressionGenerator.Random.NextDouble()*100 < probabilityThreshold)
-                    {
-                        int tmp = operandsToLeft;
-                        operandsToLeft = operandsToRight;
-                        operandsToRight = tmp;
-                    }
+                    if (ExpressionGenerator.Random.NextDouble() * 100 < probabilityThreshold)
+                        MathHelper.Swap(ref operandsToLeft, ref operandsToRight);
                 }
                 // One of the values is higher than the allowed maximum. Assign more operands to that side.
                 else
@@ -112,6 +108,8 @@ namespace ExpressionGenerator.Helpers
             }
             else if(@operator == '*')
             {
+                if (goal > Configuration.MaxOperandValue && MathHelper.IsPrime(goal))
+                    return false;
                 int threshold;
                 if(goal >= Configuration.MaxOperandValue * Configuration.MaxOperandValue)
                     threshold = (int)Math.Sqrt(goal);
