@@ -86,6 +86,8 @@ namespace ExpressionGenerator.Helpers
                 left = ExpressionGenerator.Random.Next(lowerBound, upperBound + 1);
                 right = goal - left;
 
+                if (left < 0 || right < 0)
+                    return false;
                 return true;
             }
             else if(@operator == '-')
@@ -97,12 +99,16 @@ namespace ExpressionGenerator.Helpers
                         return false;
                     left = goal + naturalModification;
                     right = naturalModification;
+                    if (left < 0 || right < 0)
+                        return false;
                     return true;
                 }
 
                 left = ExpressionGenerator.Random.Next(goal+naturalModification, Configuration.MaxOperandValue + 1);
                 right = left - goal;
                 if (left > Configuration.MaxOperandValue || right > Configuration.MaxOperandValue)
+                    return false;
+                if (left < 0 || right < 0)
                     return false;
                 return true;
             }
@@ -145,6 +151,8 @@ namespace ExpressionGenerator.Helpers
                     left = goal;
                     right = 1;
                 }
+                if (left < 0 || right < 0)
+                    return false;
                 return true;
             }
             else if(@operator == '/')
@@ -156,6 +164,8 @@ namespace ExpressionGenerator.Helpers
                         return false;
                     left = goal;
                     right = 1;
+                    if (left < 0 || right < 0)
+                        return false;
                     return true;
                 }
 
@@ -163,6 +173,8 @@ namespace ExpressionGenerator.Helpers
                 right = ExpressionGenerator.Random.Next(1, maxMultiplier + 1);
                 left = goal * right;
                 if (left > Configuration.MaxOperandValue || right > Configuration.MaxOperandValue)
+                    return false;
+                if (left < 0 || right < 0)
                     return false;
                 return true;
             }

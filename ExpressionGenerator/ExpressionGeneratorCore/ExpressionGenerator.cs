@@ -24,9 +24,9 @@ namespace ExpressionGenerator
             ReadSettingsFile();
         }
 
-        public string FromFormat(string format, int goal)
+        public string FromFormat(ExpressionFormat format, int goal)
         {
-            return new ExpressionFormat(format).GetPopulatedExpression(goal);
+            return format.GetPopulatedExpression(goal);
         }
 
         public void ReadSettingsFile() //[[7]]

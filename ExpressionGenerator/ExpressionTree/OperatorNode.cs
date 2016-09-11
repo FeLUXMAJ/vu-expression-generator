@@ -82,7 +82,7 @@ namespace ExpressionGenerator.ExpressionTree
         public void SetValue(int goal)
         {
             int left, right;
-            SplitHelper.SplitValue(goal, Operator.ToString().ToCharArray()[0], out left, out right);
+            while(!SplitHelper.SplitValue(goal, Operator.ToString().ToCharArray()[0], out left, out right));
             Left.SetValue(left);
             Right.SetValue(right);
         }

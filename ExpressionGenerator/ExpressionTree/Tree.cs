@@ -53,6 +53,7 @@ namespace ExpressionGenerator.ExpressionTree
             Root.Clear();
             Root.Left.Clear();
             Root.Right.Clear();
+            _expression = null;
         }
 
         public static Tree Join(char op, Tree left, Tree right)

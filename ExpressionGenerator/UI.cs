@@ -66,6 +66,7 @@ namespace ExpressionGenerator
 
         private static void ParseInput()
         {
+            Console.Write("\nYour choice: ");
             string input = Console.ReadLine();
             Action action;
             if(!_actions.TryGetValue(input, out action))
@@ -108,7 +109,7 @@ namespace ExpressionGenerator
             {
                 int goal = ExpressionGenerator.Random.Next(resultLower, resultUpper + 1);
                 var format = _formats.GetRandomElement();
-                Console.WriteLine(_generator.FromFormat(format.Format, goal));
+                Console.WriteLine(_generator.FromFormat(format, goal));
             }
 
             Console.Out.Flush();
@@ -191,6 +192,8 @@ namespace ExpressionGenerator
         {
             Console.Write("Enter a format: ");
             string format = Console.ReadLine();
+
+            format = Regex.Replace(format, @"\s+", "");
 
             if (!_formatRegex.IsMatch(format))
             {

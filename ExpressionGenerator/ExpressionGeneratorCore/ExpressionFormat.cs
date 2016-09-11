@@ -54,7 +54,7 @@ namespace ExpressionGenerator
                 else
                 {
                     var current = new Operator(ch);
-                    while(operatorStack.Count > 0 && new Operator(operatorStack.Peek()).PrecedenceLevel >= current.PrecedenceLevel)
+                    while(operatorStack.Count > 0 && operatorStack.Peek() != '(' && new Operator(operatorStack.Peek()).PrecedenceLevel >= current.PrecedenceLevel)
                     {
                         var topOperator = operatorStack.Pop();
                         Tree right = stack.Pop();
