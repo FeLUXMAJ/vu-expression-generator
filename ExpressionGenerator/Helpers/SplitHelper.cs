@@ -76,6 +76,13 @@ namespace ExpressionGenerator.Helpers
                     right = goal - left;
                     return true;
                 }
+
+                if(goal == 1 && presetFormat)
+                {
+                    left = 1;
+                    right = 0;
+                    return true;
+                }
                 
                 int lowerBound = Math.Max(naturalModification, goal - Configuration.MaxOperandValue);
                 int upperBound = Math.Min(Configuration.MaxOperandValue, goal-naturalModification);

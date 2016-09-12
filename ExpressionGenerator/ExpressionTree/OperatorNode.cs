@@ -83,8 +83,8 @@ namespace ExpressionGenerator.ExpressionTree
         {
             int left, right;
             while(!SplitHelper.SplitValue(goal, Operator.ToString().ToCharArray()[0], out left, out right, presetFormat));
-            Left.SetValue(left);
-            Right.SetValue(right);
+            Left.SetValue(left, presetFormat);
+            Right.SetValue(right, presetFormat);
         }
 
         public int? GetValue()
