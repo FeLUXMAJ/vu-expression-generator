@@ -212,7 +212,7 @@ namespace ExpressionGenerator
 
         private static void AddNewFormat()
         {
-            string format = IO.ReadLine("Enter a format: ");
+            string format = IO.ReadLine("Enter a format: ", removeWhiteSpace: false); // [[5]]
             if(AddNewFormat(format))
                 IO.WriteLineSuccess("Format added successfully.");
         }
