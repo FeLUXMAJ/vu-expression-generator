@@ -2,12 +2,19 @@
 
 namespace ExpressionGenerator.ExpressionTree
 {
-    class Tree
+    /// <summary>
+    /// The entire expression tree
+    /// </summary>
+    internal class Tree
     {
         private string _expression;
         public static List<char> operators = null;
 
         public INode Root { get; private set; }
+
+        /// <summary>
+        /// Returns the expression which describes this tree
+        /// </summary>
         public string Expression //[[4]]
         {
             get
@@ -18,11 +25,20 @@ namespace ExpressionGenerator.ExpressionTree
             }
         }
 
+        /// <summary>
+        /// Instantiate an empty tree (used for creating trees after a format)
+        /// </summary>
         public Tree()
         {
             Root = new OperandNode();
         }
 
+        /// <summary>
+        /// Build a tree which represents an expression, which has the specified
+        /// number of operandsand evaluates to the specified value.
+        /// </summary>
+        /// <param name="desiredValue">The value of the final expression when evaluated</param>
+        /// <param name="numberOfOperands">The number of operands in the final expression</param>
         public Tree(int desiredValue, int numberOfOperands = 2)
         {
             if(operators == null)
@@ -48,6 +64,9 @@ namespace ExpressionGenerator.ExpressionTree
             Root = new OperatorNode(op, left, right);
         }
 
+        /// <summary>
+        /// Clear the contents of this tree (that is, turn it into a format tree)
+        /// </summary>
         public void Clear()
         {
             Root.Clear();
@@ -56,11 +75,22 @@ namespace ExpressionGenerator.ExpressionTree
             _expression = null;
         }
 
+        /// <summary>
+        /// Join two trees with a specified operator
+        /// </summary>
+        /// <param name="op">Character representation of the operator to join the two subtrees</param>
+        /// <param name="left">Left subtree</param>
+        /// <param name="right">Right subtree</param>
+        /// <returns></returns>
         public static Tree Join(char op, Tree left, Tree right)
         {
             return new Tree(op, left, right);
         }
 
+        /// <summary>
+        /// Replace all # with numbers so that the final expression has the specified value
+        /// </summary>
+        /// <param name="goal">The value of the final expression when evaluated</param>
         public void PopulateWithNumbers(int goal)
         {
             if (Root.GetValue() != null)

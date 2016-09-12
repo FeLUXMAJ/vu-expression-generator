@@ -1,15 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using ExpressionGenerator.Helpers;
+﻿using ExpressionGenerator.Helpers;
 
 namespace ExpressionGenerator.ExpressionTree
 {
-    class OperatorNode : INode
+    /// <summary>
+    /// Operator node of an expression tree.
+    /// Holds the operand and its two children nodes.
+    /// </summary>
+    internal class OperatorNode : INode
     {
         public INode Left { get; private set; }
         public INode Right { get; private set; }
         public Operator Operator { get; private set; }
 
+        /// <summary>
+        /// Instantiate a new operator node and attach two subtrees to it
+        /// </summary>
+        /// <param name="op">Character representation of the operator</param>
+        /// <param name="left">Left subtree</param>
+        /// <param name="right">Right subtree</param>
         internal OperatorNode(char op, Tree left, Tree right)
         {
             Operator = new Operator(op);
@@ -17,10 +25,17 @@ namespace ExpressionGenerator.ExpressionTree
             Right = right.Root;
         }
 
+        /// <summary>
+        /// Instantiate a new operator node and make sure that its value is as specified
+        /// and the tree rooted at this node has the specified number of operand nodes.
+        /// </summary>
+        /// <param name="goal"></param>
+        /// <param name="numberOfNewNodes"></param>
         public OperatorNode(int goal, int numberOfNewNodes = 2)
         {
             int left, right;
             char op;
+            // Choose a random valid operator for this node and split the goal
             do
             {
                 op = Tree.operators.GetRandomElement();
@@ -31,6 +46,7 @@ namespace ExpressionGenerator.ExpressionTree
             Right = new OperandNode(right);
 
             int toLeft, toRight;
+            // Distribute the number of new operands to be made between the two sides
             SplitHelper.SplitNumberOfOperands(left, right, numberOfNewNodes, out toLeft, out toRight);
 
             Left = Left.Expand(toLeft);
@@ -68,7 +84,7 @@ namespace ExpressionGenerator.ExpressionTree
             {
                 var right = (OperatorNode)Right;
                 shouldEnclose  = right.Operator.PrecedenceLevel < Operator.PrecedenceLevel;
-                shouldEnclose |= right.Operator.PrecedenceLevel == Operator.PrecedenceLevel && Operator.IsStrongProcedence;
+                shouldEnclose |= right.Operator.PrecedenceLevel == Operator.PrecedenceLevel && Operator.IsStrongPrecedence;
             }
 
             if (shouldEnclose)

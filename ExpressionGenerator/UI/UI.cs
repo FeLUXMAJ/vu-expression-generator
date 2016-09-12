@@ -3,15 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using ExpressionGenerator.Menu;
 using IO = ExpressionGenerator.Helpers.IOHelper;
 
 namespace ExpressionGenerator
 {
-    static class UI
+    /// <summary>
+    /// Implements the methods to show output and parse user input
+    /// </summary>
+    public static class UI
     {
         private static ExpressionGenerator _generator = ExpressionGenerator.Instance;
         private static HashSet<ExpressionFormat> _formats = new HashSet<ExpressionFormat>(); //[[11]]
@@ -55,7 +56,7 @@ namespace ExpressionGenerator
             new MenuAction(3, ShowExistingFormats),
             new MenuAction(4, RemoveFormat),
             new MenuAction(5, GenerateRandomExpression),
-            new MenuAction(6, GenerateExpressionFromFormat),
+            new MenuAction(6, GenerateExpressionsFromFormat),
             new MenuAction(7, ExitProgram),
         };
 
@@ -66,6 +67,7 @@ namespace ExpressionGenerator
             if(_actions == null)
             {
                 // [[12]]
+                // Join menu actions and items to make a dictionary from an alias of a command to the actual action
                 _actions = (from action in _menuActions
                             join item in _menuItems on action.ItemId equals item.Id into temp
                             from t in temp
@@ -73,6 +75,7 @@ namespace ExpressionGenerator
                             select new { Alias = a, Action = action }
                             ).ToDictionary(x => x.Alias, x => x.Action.Action);
             }
+            // Program loop
             while (true)
             {
                 ShowMenu();
@@ -121,7 +124,7 @@ namespace ExpressionGenerator
             Environment.Exit(0);
         }
         
-        private static void GenerateExpressionFromFormat()
+        private static void GenerateExpressionsFromFormat()
         {
             if(_formats.Count == 0)
             {
@@ -135,24 +138,17 @@ namespace ExpressionGenerator
             while (!GetDesiredResult(out resultLower, out resultUpper)) ;
             while (!GetNumberOfExpressionsToGenerate(out numberOfExpressions)) ;
             while (!GetOutputFile(out outFileName)) ;
-            TextWriter consoleOutput = Console.Out;
-            FileStream stream = null;
-            if (outFileName != string.Empty)
-            {
-                stream = new FileStream(outFileName, FileMode.Create);
-                Console.SetOut(new StreamWriter(stream));
-            }
+
+            IO.RedirectOutputToFile(outFileName, FileMode.Create);
 
             for (int i = 0; i < numberOfExpressions; i++)
             {
                 int goal = ExpressionGenerator.Random.Next(resultLower, resultUpper + 1);
                 var format = _formats.GetRandomElement();
-                Console.WriteLine(_generator.FromFormat(format, goal));
+                IO.WriteLine(_generator.FromFormat(format, goal));
             }
 
-            Console.Out.Flush();
-            stream?.Close();
-            Console.SetOut(consoleOutput);
+            IO.RedirectOutputToConsole();
         }
 
         private static void GenerateRandomExpression()
@@ -171,7 +167,7 @@ namespace ExpressionGenerator
             {
                 int goal = ExpressionGenerator.Random.Next(resultLower, resultUpper + 1);
                 int numberOfOperands = ExpressionGenerator.Random.Next(numberOfOperandsLower, numberOfOperandsUpper + 1);
-                Console.WriteLine(_generator.BuildExpression(goal, numberOfOperands));
+                IO.WriteLine(_generator.BuildExpression(goal, numberOfOperands));
             }
 
             IO.RedirectOutputToConsole();
@@ -207,7 +203,7 @@ namespace ExpressionGenerator
             }
 
             foreach(var format in _formats.OrderBy(x => x.Index))
-                Console.WriteLine($"{format.Index}: {format.Format}");
+                IO.WriteLine($"{format.Index}: {format.Format}");
         }
 
         private static void AddNewFormat()

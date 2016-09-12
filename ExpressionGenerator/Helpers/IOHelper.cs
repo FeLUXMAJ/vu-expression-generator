@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ExpressionGenerator.Helpers
 {
-    class IOHelper
+    /// <summary>
+    /// Makes the job of outputting colored text to console easier.
+    /// </summary>
+    internal class IOHelper
     {
         #region Input
         private const ConsoleColor INPUT_COLOR = ConsoleColor.Magenta;
@@ -107,7 +106,17 @@ namespace ExpressionGenerator.Helpers
 
         public static void Write(string format, params object[] args)
         {
-            WriteInternal(ConsoleColor.Cyan, format, args);
+            string formatted = string.Format(format, args);
+            string[] parts = formatted.Split(new char[] { HIGHLIGHT_DELIMETER });
+            if (parts.Length % 2 != 1)
+                throw new FormatException("Invalid message format");
+            for (int i = 0; i < parts.Length; i++)
+            {
+                if (i % 2 == 1)
+                    WriteInternal(ConsoleColor.Cyan, parts[i]);
+                else
+                    Console.Write(parts[i]);
+            }
         }
         #endregion
 

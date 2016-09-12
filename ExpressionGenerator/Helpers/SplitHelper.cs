@@ -1,13 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressionGenerator.Helpers
 {
-    static class SplitHelper
+    /// <summary>
+    /// Helps with splitting various values into parts.
+    /// </summary>
+    internal static class SplitHelper
     {
+        /// <summary>
+        /// Distribute the total number of operands between two new nodes
+        /// </summary>
+        /// <param name="leftValue">Value of left node</param>
+        /// <param name="rightValue">Value of right node</param>
+        /// <param name="totalNumberOfOperands">Total number of operands to be split</param>
+        /// <param name="operandsToLeft">Operands assigned to the left node</param>
+        /// <param name="operandsToRight">Operands assigned to the right node</param>
         public static void SplitNumberOfOperands(int leftValue, int rightValue, int totalNumberOfOperands, out int operandsToLeft, out int operandsToRight)
         {
             operandsToLeft = 1;
@@ -18,7 +25,7 @@ namespace ExpressionGenerator.Helpers
                 if ((leftValue < Configuration.MaxOperandValue && rightValue < Configuration.MaxOperandValue) ||
                    (leftValue > Configuration.MaxOperandValue && rightValue > Configuration.MaxOperandValue))
                 {
-                    double splitPercentage = GetSplitPercentage(ExpressionGenerator.Random.Next(100));
+                    double splitPercentage = GetSplitPercentage();
                     int splitPart = (int)(splitPercentage * totalNumberOfOperands);
                     if (splitPart == 0)
                         splitPart = 1;
@@ -188,10 +195,13 @@ namespace ExpressionGenerator.Helpers
             return false;
         }
 
-        private static double GetSplitPercentage(int number)
+        /// <summary>
+        /// Get fraction of how many operands should be assigned to the lesser side.
+        /// </summary>
+        private static double GetSplitPercentage()
         {
-            if (number < 0 || number >= 100)
-                throw new ArgumentOutOfRangeException("number");
+            int number = ExpressionGenerator.Random.Next(100);
+
             if (number < 10)
                 return 0.1;
             if (number < 25)

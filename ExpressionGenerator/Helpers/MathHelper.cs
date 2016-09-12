@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ExpressionGenerator.Helpers
+﻿namespace ExpressionGenerator.Helpers
 {
-    static class MathHelper
+    /// <summary>
+    /// Provides some helper mathematical methods
+    /// </summary>
+    internal static class MathHelper
     {
+        /// <summary>
+        /// Swaps the values of two elements
+        /// </summary>
         public static void Swap<T>(ref T a, ref T b) //[[8]]
         {
             T tmp = a;
@@ -15,6 +15,11 @@ namespace ExpressionGenerator.Helpers
             b = tmp;
         }
 
+        /// <summary>
+        /// Determines whether the given number is prime or not
+        /// </summary>
+        /// <param name="number">The number to be tested for primality</param>
+        /// <returns>True if the number is prime, false otherwise</returns>
         public static bool IsPrime(int number)
         {
             if (number < 2)

@@ -2,6 +2,9 @@
 
 namespace ExpressionGenerator
 {
+    /// <summary>
+    /// Global setting of the program
+    /// </summary>
     class Configuration
     {
         [Flags]
