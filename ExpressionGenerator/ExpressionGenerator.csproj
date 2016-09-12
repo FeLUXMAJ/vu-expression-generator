@@ -53,6 +53,7 @@
     <Compile Include="ExpressionGeneratorCore\ExpressionGenerator.cs" />
     <Compile Include="Helpers\ListExtensions.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
+    <Compile Include="Helpers\OutputStyler.cs" />
     <Compile Include="Helpers\SplitHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

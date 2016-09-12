@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Out = ExpressionGenerator.Helpers.OutputStyler;
 
 namespace ExpressionGenerator
 {
@@ -63,6 +64,7 @@ namespace ExpressionGenerator
             Console.WriteLine("\t4. Generate a random expression");
             Console.WriteLine("\t5. Generate an expression from a format");
             Console.WriteLine("\t6. Exit");
+            Out.WriteLineHighlight("HIGH");
         }
 
         private static void ParseInput()
@@ -72,9 +74,7 @@ namespace ExpressionGenerator
             Action action;
             if(!_actions.TryGetValue(input, out action))
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid input!");
-                Console.ResetColor();
+                Out.WriteLineError("Invalid input!");
                 return;
             }
             if (action == null)
@@ -86,9 +86,7 @@ namespace ExpressionGenerator
         {
             if(_formats.Count == 0)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("There are no formats specified!");
-                Console.ResetColor();
+                Out.WriteLineError("There are no formats specified!");
                 return;
             }
 
@@ -154,24 +152,18 @@ namespace ExpressionGenerator
             int id;
             if(!int.TryParse(input, out id))
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("You must enter a number!");
-                Console.ResetColor();
+                Out.WriteLineError("You must enter a number!");
                 return;
             }
 
             int removed = _formats.RemoveAll(x => x.Index == id); //[[12]]
             if(removed == 0)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("No formats with the specified ID found!");
-                Console.ResetColor();
+                Out.WriteLineError("No formats with the specified ID found!");
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Format removed successfully.");
-                Console.ResetColor();
+                Out.WriteLineSuccess("Format removed successfully.");
             }
         }
 
@@ -179,9 +171,7 @@ namespace ExpressionGenerator
         {
             if(_formats.Count == 0)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("No formats found.");
-                Console.ResetColor();
+                Out.WriteLineWarning("No formats found.");
                 return;
             }
 
@@ -198,17 +188,13 @@ namespace ExpressionGenerator
 
             if (!_formatRegex.IsMatch(format))
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid format!");
-                Console.ResetColor();
+                Out.WriteLineError("Invalid format!");
                 return;
             }
             
             _formats.Add(new ExpressionFormat(format));
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Format added successfully.");
-            Console.ResetColor();
+            
+            Out.WriteLineSuccess("Format added successfully.");
         }
 
         #region Helper methods
@@ -220,9 +206,7 @@ namespace ExpressionGenerator
             var args = input.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             if (args.Length == 0)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("You must enter at least one number!");
-                Console.ResetColor();
+                Out.WriteLineError("You must enter at least one number!");
                 return false;
             }
             else if (args.Length == 1)
@@ -230,9 +214,7 @@ namespace ExpressionGenerator
                 int result;
                 if (!int.TryParse(args[0], out result))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("You must enter a number!");
-                    Console.ResetColor();
+                    Out.WriteLineError("You must enter a number!");
                     return false;
                 }
                 lower = upper = result;
@@ -241,9 +223,7 @@ namespace ExpressionGenerator
             {
                 if (!int.TryParse(args[0], out lower) || !int.TryParse(args[1], out upper))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("You must enter a number!");
-                    Console.ResetColor();
+                    Out.WriteLineError("You must enter a number!");
                     return false;
                 }
                 if (upper < lower)
@@ -251,9 +231,7 @@ namespace ExpressionGenerator
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Too many numbers provided!");
-                Console.ResetColor();
+                Out.WriteLineError("Too many numbers provided!");
                 return false;
             }
             return true;
@@ -267,9 +245,7 @@ namespace ExpressionGenerator
             var args = input.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             if (args.Length == 0)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("You must enter at least one number!");
-                Console.ResetColor();
+                Out.WriteLineError("You must enter at least one number!");
                 return false;
             }
             else if (args.Length == 1)
@@ -277,16 +253,12 @@ namespace ExpressionGenerator
                 int result;
                 if (!int.TryParse(args[0], out result))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("You must enter a number!");
-                    Console.ResetColor();
+                    Out.WriteLineError("You must enter a number!");
                     return false;
                 }
                 if (result < 2)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("There must be at least two operands!");
-                    Console.ResetColor();
+                    Out.WriteLineError("There must be at least two operands!");
                     return false;
                 }
                 lower = upper = result;
@@ -295,9 +267,7 @@ namespace ExpressionGenerator
             {
                 if (!int.TryParse(args[0], out lower) || !int.TryParse(args[1], out upper))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("You must enter a number!");
-                    Console.ResetColor();
+                    Out.WriteLineError("You must enter a number!");
                     return false;
                 }
                 if (upper < lower)
@@ -305,17 +275,13 @@ namespace ExpressionGenerator
 
                 if (lower < 2 || upper < 2)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("There must be at least two operands!");
-                    Console.ResetColor();
+                    Out.WriteLineError("There must be at least two operands!");
                     return false;
                 }
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Too many numbers provided!");
-                Console.ResetColor();
+                Out.WriteLineError("Too many numbers provided!");
                 return false;
             }
             return true;
@@ -327,9 +293,7 @@ namespace ExpressionGenerator
             string input = Console.ReadLine();
             if (!int.TryParse(input, out number))
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("You must enter a number!");
-                Console.ResetColor();
+                Out.WriteLineError("You must enter a number!");
                 return false;
             }
             return true;
@@ -347,16 +311,12 @@ namespace ExpressionGenerator
                 }
                 catch (ArgumentException)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Invalid file name!");
-                    Console.ResetColor();
+                    Out.WriteLineError("Invalid file name!");
                     return false;
                 }
                 catch (Exception e)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(e.Message);
-                    Console.ResetColor();
+                    Out.WriteLineError(e.Message);
                     return false;
                 }
             }
