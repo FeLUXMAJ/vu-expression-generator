@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExpressionGenerator
 {
-    class ExpressionFormat
+    class ExpressionFormat : IEquatable<ExpressionFormat>
     {
         private Tree _expressionTree;
         private static int _globalIndex = 1;
@@ -73,6 +73,16 @@ namespace ExpressionGenerator
                 stack.Push(Tree.Join(popped, left, right));
             }
             return stack.Pop();
+        }
+
+        public override int GetHashCode()
+        {
+            return Format.GetHashCode();
+        }
+
+        public bool Equals(ExpressionFormat other)
+        {
+            return Format == other.Format;
         }
     }
 }

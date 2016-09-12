@@ -14,7 +14,7 @@ namespace ExpressionGenerator
     static class UI
     {
         private static ExpressionGenerator _generator = ExpressionGenerator.Instance;
-        private static List<ExpressionFormat> _formats = new List<ExpressionFormat>(); //[[11]]
+        private static HashSet<ExpressionFormat> _formats = new HashSet<ExpressionFormat>(); //[[11]]
         //[[9]]
         private static Regex _formatRegex = new Regex
             (
@@ -102,14 +102,16 @@ namespace ExpressionGenerator
         {
             string fileName;
             while (!GetInputFile(out fileName)) ;
+            if (!File.Exists(fileName))
+            {
+                IO.WriteLineError("The specified file could not be found.");
+                return;
+            }
             string[] lines = File.ReadAllLines(fileName).Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
 
             foreach(string line in lines)
                 if (!AddNewFormat(line))
-                {
-                    IO.WriteLineError("Invalid format found: '{0}'", line);
                     return;
-                }
             IO.WriteLineSuccess("All formats added successfully.");
         }
 
@@ -183,9 +185,9 @@ namespace ExpressionGenerator
                 IO.WriteLineError("You must enter a number!");
                 return;
             }
-
-            int removed = _formats.RemoveAll(x => x.Index == id); //[[12]]
-            if(removed == 0)
+            
+            int removed = _formats.RemoveWhere(x => x.Index == id); //[[12]]
+            if (removed == 0)
             {
                 IO.WriteLineError("No formats with the specified ID found!");
             }
@@ -203,16 +205,14 @@ namespace ExpressionGenerator
                 return;
             }
 
-            foreach(var format in _formats)
+            foreach(var format in _formats.OrderBy(x => x.Index))
                 Console.WriteLine($"{format.Index}: {format.Format}");
         }
 
         private static void AddNewFormat()
         {
             string format = IO.ReadLine("Enter a format: ");
-            if(!AddNewFormat(format))
-                IO.WriteLineError("Invalid format!");
-            else
+            if(AddNewFormat(format))
                 IO.WriteLineSuccess("Format added successfully.");
         }
 
@@ -221,9 +221,16 @@ namespace ExpressionGenerator
             format = Regex.Replace(format, @"\s+", "");
 
             if (format.Length < 3 || !_formatRegex.IsMatch(format))
+            {
+                IO.WriteLineError("Format '{0}' is invalid!", format);
                 return false;
+            }
 
-            _formats.Add(new ExpressionFormat(format));
+            if(!_formats.Add(new ExpressionFormat(format)))
+            {
+                IO.WriteLineError("Format '{0}' already exists!", format);
+                return false;
+            }
             return true;
         }
 

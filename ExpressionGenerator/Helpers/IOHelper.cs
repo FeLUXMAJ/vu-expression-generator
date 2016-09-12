@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ExpressionGenerator.Helpers
@@ -11,11 +12,16 @@ namespace ExpressionGenerator.Helpers
     {
         #region Input
         private const ConsoleColor INPUT_COLOR = ConsoleColor.Magenta;
-        public static string ReadLine(string prompt = "")
+
+        public static string ReadLine(string prompt = "", bool toLowerCase = true, bool removeWhiteSpace = true)
         {
             WriteInternal(ConsoleColor.Gray, prompt);
             Console.ForegroundColor = INPUT_COLOR;
             string ret = Console.ReadLine();
+            if (toLowerCase)
+                ret = ret.ToLower();
+            if (removeWhiteSpace)
+                ret = Regex.Replace(ret, @"\s+", "");
             Console.ResetColor();
             return ret;
         }
