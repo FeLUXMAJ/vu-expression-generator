@@ -130,7 +130,9 @@ namespace ExpressionGenerator.Helpers
         private static FileStream _fileStream = null;
 
         public static void RedirectOutputToFile(string fileName, FileMode fileMode)
-        { 
+        {
+            if (fileName == string.Empty)
+                return;
             _fileStream = new FileStream(fileName, fileMode);
             Console.SetOut(new StreamWriter(_fileStream));
         }

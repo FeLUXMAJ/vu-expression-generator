@@ -239,7 +239,7 @@ namespace ExpressionGenerator
         private static bool GetDesiredResult(out int lower, out int upper)
         {
             lower = upper = -1;
-            string input = IO.ReadLine("Desired result (one number for exact result, two numbers for a range): ");
+            string input = IO.ReadLine("Desired result (one number for exact result, two numbers for a range): ", removeWhiteSpace: false);
             var args = input.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             if (args.Length == 0)
             {
@@ -277,7 +277,8 @@ namespace ExpressionGenerator
         private static bool GetNumberOfOperands(out int lower, out int upper)
         {
             lower = upper = -1;
-            string input = IO.ReadLine("Desired number of operands in each expression (one number for exact number of operands, two numbers for a range): ");
+            string input = IO.ReadLine("Desired number of operands in each expression (one number for exact number of operands, two numbers for a range): ",
+                                        removeWhiteSpace: false);
             var args = input.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             if (args.Length == 0)
             {
