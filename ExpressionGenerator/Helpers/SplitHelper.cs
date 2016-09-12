@@ -61,7 +61,7 @@ namespace ExpressionGenerator.Helpers
         /// left *@operand* right = goal
         /// </summary>
         /// <returns>True if split was successful, false otherwise</returns>
-        public static bool SplitValue(int goal, char @operator, out int left, out int right)
+        public static bool SplitValue(int goal, char @operator, out int left, out int right, bool presetFormat = false)
         {
             left = right = -1;
             int naturalModification = Configuration.AllowZero ? 0 : 1;
@@ -94,8 +94,8 @@ namespace ExpressionGenerator.Helpers
             {
                 if(goal >= Configuration.MaxOperandValue)
                 {
-                    if (Configuration.AllowedOperators.HasFlag(Configuration.Operators.ADD) ||
-                        Configuration.AllowedOperators.HasFlag(Configuration.Operators.MUL))
+                    if ((Configuration.AllowedOperators.HasFlag(Configuration.Operators.ADD) ||
+                        Configuration.AllowedOperators.HasFlag(Configuration.Operators.MUL)) && !presetFormat)
                         return false;
                     left = goal + naturalModification;
                     right = naturalModification;
@@ -159,8 +159,8 @@ namespace ExpressionGenerator.Helpers
             {
                 if(goal >= Configuration.MaxOperandValue)
                 {
-                    if (Configuration.AllowedOperators.HasFlag(Configuration.Operators.ADD) ||
-                        Configuration.AllowedOperators.HasFlag(Configuration.Operators.MUL))
+                    if ((Configuration.AllowedOperators.HasFlag(Configuration.Operators.ADD) ||
+                        Configuration.AllowedOperators.HasFlag(Configuration.Operators.MUL)) && !presetFormat)
                         return false;
                     left = goal;
                     right = 1;

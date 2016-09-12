@@ -65,7 +65,7 @@ namespace ExpressionGenerator.ExpressionTree
         {
             if (Root.GetValue() != null)
                 return;
-            Root.SetValue(goal);
+            Root.SetValue(goal, true);
         }
     }
 }

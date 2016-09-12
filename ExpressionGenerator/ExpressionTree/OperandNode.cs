@@ -26,7 +26,7 @@ namespace ExpressionGenerator.ExpressionTree
             return new OperatorNode(Value.Value, numberOfNewOperands);
         }
 
-        public void SetValue(int value)
+        public void SetValue(int value, bool presetFormat)
         {
             if (Value != null)
                 return;

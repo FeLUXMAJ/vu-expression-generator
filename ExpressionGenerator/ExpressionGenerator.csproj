@@ -51,13 +51,15 @@
     <Compile Include="ExpressionTree\Operator.cs" />
     <Compile Include="ExpressionTree\OperatorNode.cs" />
     <Compile Include="ExpressionGeneratorCore\ExpressionGenerator.cs" />
+    <Compile Include="Helpers\IOHelper.cs" />
     <Compile Include="Helpers\ListExtensions.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
-    <Compile Include="Helpers\OutputStyler.cs" />
     <Compile Include="Helpers\SplitHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI.cs" />
+    <Compile Include="UI\Menu\MenuAction.cs" />
+    <Compile Include="UI\Menu\MenuItem.cs" />
+    <Compile Include="UI\UI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

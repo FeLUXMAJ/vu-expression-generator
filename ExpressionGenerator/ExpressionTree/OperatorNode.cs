@@ -79,10 +79,10 @@ namespace ExpressionGenerator.ExpressionTree
             return ret;
         }
 
-        public void SetValue(int goal)
+        public void SetValue(int goal, bool presetFormat = false)
         {
             int left, right;
-            while(!SplitHelper.SplitValue(goal, Operator.ToString().ToCharArray()[0], out left, out right));
+            while(!SplitHelper.SplitValue(goal, Operator.ToString().ToCharArray()[0], out left, out right, presetFormat));
             Left.SetValue(left);
             Right.SetValue(right);
         }

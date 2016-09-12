@@ -6,7 +6,7 @@
         INode Right { get; }
         INode Expand(int numberOfNewOperands = 2);
         int? GetValue();
-        void SetValue(int value);
+        void SetValue(int value, bool presetFormat = false);
         void Clear();
         string Evaluate();
     }

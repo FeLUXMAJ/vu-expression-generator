@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Out = ExpressionGenerator.Helpers.OutputStyler;
+using ExpressionGenerator.Menu;
+using IO = ExpressionGenerator.Helpers.IOHelper;
 
 namespace ExpressionGenerator
 {
@@ -36,18 +37,41 @@ namespace ExpressionGenerator
               $                               # Anchor to end of string"
             );
 
-        private static Dictionary<string, Action> _actions = new Dictionary<string, Action>()
+        private static List<MenuItem> _menuItems = new List<MenuItem>()
         {
-            { "1", AddNewFormat},
-            { "2", ShowExistingFormats },
-            { "3", RemoveFormat },
-            { "4", GenerateRandomExpression },
-            { "5", GenerateExpressionFromFormat },
-            { "6", null },
+            new MenuItem(1, "`Add` a `new` format", new string[] { "1", "add", "a", "new", "n" }),
+            new MenuItem(2, "`Load` formats from file", new string[] { "2", "load", "l" }),
+            new MenuItem(3, "`Show` existing formats", new string[] { "3", "show", "s", "existing", "e", "ex", "exist" }),
+            new MenuItem(4, "`Remove` a format", new string[] { "4", "remove", "r", "rem" }),
+            new MenuItem(5, "Generate a `random` expression", new string[] { "5", "random", "rand" }),
+            new MenuItem(6, "Generate an expression from a `format`", new string[] { "6", "format", "form", "f" }),
+            new MenuItem(7, "`Exit`", new string[] { "7", "exit" }),
         };
+
+        private static List<MenuAction> _menuActions = new List<MenuAction>()
+        {
+            new MenuAction(1, AddNewFormat),
+            new MenuAction(2, LoadFormatsFromFile),
+            new MenuAction(3, ShowExistingFormats),
+            new MenuAction(4, RemoveFormat),
+            new MenuAction(5, GenerateRandomExpression),
+            new MenuAction(6, GenerateExpressionFromFormat),
+            new MenuAction(7, ExitProgram),
+        };
+
+        private static Dictionary<string, Action> _actions = null;
 
         public static void Start()
         {
+            if(_actions == null)
+            {
+                _actions = (from action in _menuActions
+                            join item in _menuItems on action.ItemId equals item.Id into temp
+                            from t in temp
+                            from a in t.Aliases
+                            select new { Alias = a, Action = action }
+                            ).ToDictionary(x => x.Alias, x => x.Action.Action);
+            }
             while (true)
             {
                 ShowMenu();
@@ -57,36 +81,48 @@ namespace ExpressionGenerator
 
         private static void ShowMenu()
         {
-            Console.WriteLine("Enter a number corresponding to one of the commands below:");
-            Console.WriteLine("\t1. Add a new format (e.g. '#+#*#/(#-#)')");
-            Console.WriteLine("\t2. Show existing formats");
-            Console.WriteLine("\t3. Remove a format");
-            Console.WriteLine("\t4. Generate a random expression");
-            Console.WriteLine("\t5. Generate an expression from a format");
-            Console.WriteLine("\t6. Exit");
-            Out.WriteLineHighlight("HIGH");
+            foreach(var item in _menuItems)
+                IO.WriteLine("`{0}`. {1}", item.Id, item.Description);
+            IO.WriteLine("");
         }
 
         private static void ParseInput()
         {
-            Console.Write("\nYour choice: ");
-            string input = Console.ReadLine();
+            string input = IO.ReadLine("Your choice: ");
             Action action;
             if(!_actions.TryGetValue(input, out action))
             {
-                Out.WriteLineError("Invalid input!");
+                IO.WriteLineError("Invalid input!");
                 return;
             }
-            if (action == null)
-                Environment.Exit(0);
             action();
+        }
+
+        private static void LoadFormatsFromFile()
+        {
+            string fileName;
+            while (!GetInputFile(out fileName)) ;
+            string[] lines = File.ReadAllLines(fileName).Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+
+            foreach(string line in lines)
+                if (!AddNewFormat(line))
+                {
+                    IO.WriteLineError("Invalid format found: '{0}'", line);
+                    return;
+                }
+            IO.WriteLineSuccess("All formats added successfully.");
+        }
+
+        private static void ExitProgram()
+        {
+            Environment.Exit(0);
         }
         
         private static void GenerateExpressionFromFormat()
         {
             if(_formats.Count == 0)
             {
-                Out.WriteLineError("There are no formats specified!");
+                IO.WriteLineError("There are no formats specified!");
                 return;
             }
 
@@ -125,13 +161,8 @@ namespace ExpressionGenerator
             while (!GetNumberOfOperands(out numberOfOperandsLower, out numberOfOperandsUpper));
             while (!GetNumberOfExpressionsToGenerate(out numberOfExpressions));
             while (!GetOutputFile(out outFileName));
-            TextWriter consoleOutput = Console.Out;
-            FileStream stream = null;
-            if(outFileName != string.Empty)
-            {
-                stream = new FileStream(outFileName, FileMode.Create);
-                Console.SetOut(new StreamWriter(stream));
-            }
+
+            IO.RedirectOutputToFile(outFileName, FileMode.Create);
             
             for (int i = 0; i < numberOfExpressions; i++)
             {
@@ -140,30 +171,27 @@ namespace ExpressionGenerator
                 Console.WriteLine(_generator.BuildExpression(goal, numberOfOperands));
             }
 
-            Console.Out.Flush();
-            stream?.Close();
-            Console.SetOut(consoleOutput);
+            IO.RedirectOutputToConsole();
         }
 
         private static void RemoveFormat()
         {
-            Console.Write("Id of format to remove: ");
-            string input = Console.ReadLine();
+            string input = IO.ReadLine("Id of format to remove: ");
             int id;
             if(!int.TryParse(input, out id))
             {
-                Out.WriteLineError("You must enter a number!");
+                IO.WriteLineError("You must enter a number!");
                 return;
             }
 
             int removed = _formats.RemoveAll(x => x.Index == id); //[[12]]
             if(removed == 0)
             {
-                Out.WriteLineError("No formats with the specified ID found!");
+                IO.WriteLineError("No formats with the specified ID found!");
             }
             else
             {
-                Out.WriteLineSuccess("Format removed successfully.");
+                IO.WriteLineSuccess("Format removed successfully.");
             }
         }
 
@@ -171,7 +199,7 @@ namespace ExpressionGenerator
         {
             if(_formats.Count == 0)
             {
-                Out.WriteLineWarning("No formats found.");
+                IO.WriteLineWarning("No formats found.");
                 return;
             }
 
@@ -181,32 +209,33 @@ namespace ExpressionGenerator
 
         private static void AddNewFormat()
         {
-            Console.Write("Enter a format: ");
-            string format = Console.ReadLine();
+            string format = IO.ReadLine("Enter a format: ");
+            if(!AddNewFormat(format))
+                IO.WriteLineError("Invalid format!");
+            else
+                IO.WriteLineSuccess("Format added successfully.");
+        }
 
+        private static bool AddNewFormat(string format)
+        {
             format = Regex.Replace(format, @"\s+", "");
 
-            if (!_formatRegex.IsMatch(format))
-            {
-                Out.WriteLineError("Invalid format!");
-                return;
-            }
-            
+            if (format.Length < 3 || !_formatRegex.IsMatch(format))
+                return false;
+
             _formats.Add(new ExpressionFormat(format));
-            
-            Out.WriteLineSuccess("Format added successfully.");
+            return true;
         }
 
         #region Helper methods
         private static bool GetDesiredResult(out int lower, out int upper)
         {
             lower = upper = -1;
-            Console.Write("Desired result (one number for exact result, two numbers for a range): ");
-            string input = Console.ReadLine();
+            string input = IO.ReadLine("Desired result (one number for exact result, two numbers for a range): ");
             var args = input.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             if (args.Length == 0)
             {
-                Out.WriteLineError("You must enter at least one number!");
+                IO.WriteLineError("You must enter at least one number!");
                 return false;
             }
             else if (args.Length == 1)
@@ -214,7 +243,7 @@ namespace ExpressionGenerator
                 int result;
                 if (!int.TryParse(args[0], out result))
                 {
-                    Out.WriteLineError("You must enter a number!");
+                    IO.WriteLineError("You must enter a number!");
                     return false;
                 }
                 lower = upper = result;
@@ -223,7 +252,7 @@ namespace ExpressionGenerator
             {
                 if (!int.TryParse(args[0], out lower) || !int.TryParse(args[1], out upper))
                 {
-                    Out.WriteLineError("You must enter a number!");
+                    IO.WriteLineError("You must enter a number!");
                     return false;
                 }
                 if (upper < lower)
@@ -231,7 +260,7 @@ namespace ExpressionGenerator
             }
             else
             {
-                Out.WriteLineError("Too many numbers provided!");
+                IO.WriteLineError("Too many numbers provided!");
                 return false;
             }
             return true;
@@ -240,12 +269,11 @@ namespace ExpressionGenerator
         private static bool GetNumberOfOperands(out int lower, out int upper)
         {
             lower = upper = -1;
-            Console.Write("Desired number of operands in each expression (one number for exact number of operands, two numbers for a range): ");
-            string input = Console.ReadLine();
+            string input = IO.ReadLine("Desired number of operands in each expression (one number for exact number of operands, two numbers for a range): ");
             var args = input.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             if (args.Length == 0)
             {
-                Out.WriteLineError("You must enter at least one number!");
+                IO.WriteLineError("You must enter at least one number!");
                 return false;
             }
             else if (args.Length == 1)
@@ -253,12 +281,12 @@ namespace ExpressionGenerator
                 int result;
                 if (!int.TryParse(args[0], out result))
                 {
-                    Out.WriteLineError("You must enter a number!");
+                    IO.WriteLineError("You must enter a number!");
                     return false;
                 }
                 if (result < 2)
                 {
-                    Out.WriteLineError("There must be at least two operands!");
+                    IO.WriteLineError("There must be at least two operands!");
                     return false;
                 }
                 lower = upper = result;
@@ -267,7 +295,7 @@ namespace ExpressionGenerator
             {
                 if (!int.TryParse(args[0], out lower) || !int.TryParse(args[1], out upper))
                 {
-                    Out.WriteLineError("You must enter a number!");
+                    IO.WriteLineError("You must enter a number!");
                     return false;
                 }
                 if (upper < lower)
@@ -275,13 +303,13 @@ namespace ExpressionGenerator
 
                 if (lower < 2 || upper < 2)
                 {
-                    Out.WriteLineError("There must be at least two operands!");
+                    IO.WriteLineError("There must be at least two operands!");
                     return false;
                 }
             }
             else
             {
-                Out.WriteLineError("Too many numbers provided!");
+                IO.WriteLineError("Too many numbers provided!");
                 return false;
             }
             return true;
@@ -289,11 +317,36 @@ namespace ExpressionGenerator
 
         private static bool GetNumberOfExpressionsToGenerate(out int number)
         {
-            Console.Write("Number of expressions to generate: ");
-            string input = Console.ReadLine();
+            string input = IO.ReadLine("Number of expressions to generate: ");
             if (!int.TryParse(input, out number))
             {
-                Out.WriteLineError("You must enter a number!");
+                IO.WriteLineError("You must enter a number!");
+                return false;
+            }
+            return true;
+        }
+
+        private static bool GetInputFile(out string inputFileName)
+        {
+            inputFileName = IO.ReadLine("Input file: ");
+            if(inputFileName == string.Empty)
+            {
+                IO.WriteLineError("No input file provided.");
+                return false;
+            }
+
+            try
+            {
+                new FileInfo(inputFileName);
+            }
+            catch (ArgumentException)
+            {
+                IO.WriteLineError("Invalid file name!");
+                return false;
+            }
+            catch (Exception e)
+            {
+                IO.WriteLineError(e.Message);
                 return false;
             }
             return true;
@@ -301,8 +354,7 @@ namespace ExpressionGenerator
 
         private static bool GetOutputFile(out string outFileName)
         {
-            Console.Write("Output file (leave blank if you want console output): ");
-            outFileName = Console.ReadLine();
+            outFileName = IO.ReadLine("Output file (leave blank if you want console output): ");
             if (outFileName != "")
             {
                 try
@@ -311,12 +363,12 @@ namespace ExpressionGenerator
                 }
                 catch (ArgumentException)
                 {
-                    Out.WriteLineError("Invalid file name!");
+                    IO.WriteLineError("Invalid file name!");
                     return false;
                 }
                 catch (Exception e)
                 {
-                    Out.WriteLineError(e.Message);
+                    IO.WriteLineError(e.Message);
                     return false;
                 }
             }
