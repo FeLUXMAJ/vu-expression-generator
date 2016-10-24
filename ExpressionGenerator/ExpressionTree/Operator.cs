@@ -58,6 +58,7 @@ namespace ExpressionGenerator.ExpressionTree
             if (left == null || right == null)
                 return null;
             return calculate(left.Value, right.Value);
+            // random comment
         }
 
         public override string ToString()
